@@ -4,9 +4,9 @@ import { NPuesto } from '../../negocio/NPuesto';
 import  NSector  from '../../negocio/NSector';
 
 export default class PPuesto{
-    private listSector:any[];
-    private listComerciantes:any[];
-    private listPuesto : any[];
+    private listaSector:any[];
+    private listaComerciantes:any[];
+    private listaPuesto : any[];
 
     private nPuesto:NPuesto;
     private nSector:NSector;  
@@ -14,7 +14,7 @@ export default class PPuesto{
     public router:Router = Router();
 
     constructor() {
-        this.listPuesto = [];
+        this.listaPuesto = [];
         this.nPuesto = new NPuesto();
         this.nSector = new NSector();     
         this.nComerciante = new NComerciante();
@@ -26,14 +26,24 @@ export default class PPuesto{
 
     public async listar(req:Request, res:Response){                 
         // const result = await this.nComerciante.listar();
-        this.listPuesto = await  this.nPuesto.listar();
-        this.listSector = await this.nSector.listar();
-        this.listComerciantes = await this.nComerciante.listar();
+        this.listaPuesto = await  this.nPuesto.listar();
+        this.listaSector = await this.nSector.listar();
+        this.listaComerciantes = await this.nComerciante.listar();
         
+        
+        let propiedades:any[] = [];
+        this.listaPuesto.map( (p)=>{
+            this.listaComerciantes.forEach( (c) =>{
+                if(p.comerciante_id  == c.ci){
+                    propiedades.push({"apPaterno": c.apPaterno, "nombre": c.nombre, "cod": p.cod, "sector": p.sector, "estado":p.estado, "sector_id":p.sector_id, "comerciante_id":p.comerciante_id});
+                }
+            });
+        });
+
         res.render("PPuesto/puesto",{
-            puestos: this.listPuesto,
-            sectores: this.listSector ,
-            comerciantes: this.listComerciantes            
+            propiedades: propiedades,
+            sectores: this.listaSector ,
+            comerciantes: this.listaComerciantes            
         });     
     }
 
@@ -49,8 +59,8 @@ export default class PPuesto{
             res.render('PPuesto/editar', {
                 cod: cod,
                 estado: estado, 
-                sectores: this.listSector,
-                comerciantes: this.listComerciantes,
+                sectores: this.listaSector,
+                comerciantes: this.listaComerciantes,
                 sector_nombre: sector_nombre,
                 sector_id: sector_id,
                 comerciante_id: comerciante_id,
