@@ -7,7 +7,7 @@ export class DDetallePago{
     private monto:number;
     private tipo:string;
 
-    constructor(nroBoleta:number, nro:number, monto?:number, tipo?:string){
+    constructor(nroBoleta?:number, nro?:number, monto?:number, tipo?:string){
         this.nroBoleta = nroBoleta || -1;
         this.nro = nro || -1;
         this.monto = monto || 0.0;
@@ -32,22 +32,25 @@ export class DDetallePago{
         }
     }
 
-    public async registrar(nroBoleta: number): Promise<boolean> {
-        let seRegistro:boolean = false;
-       
-        const query = `INSERT INTO detalle_pago (nroBoleta, estado, sector_id, comerciante_id) VALUES (?, ?, ?,?)`;
+ 
+    public async registrar( detalles:any[]):Promise<boolean>{
+        let seRegistro:boolean = false; 
         
-        // await Conexion.ejecutarQuery(query, 
-        //     [ this.cod, this.estado, sector_id, comerciante_id ])
-        //     .then(                
-        //         (data) => {
-        //             console.log('DPUESTO: nuevo registro insertado');
-        //             seRegistro = true;
-        //         }
-        //     ).catch(
-        //         (err) => console.log(err)
-        //     );
+        if(this.nroBoleta == -1) return seRegistro;
 
-        return seRegistro;              
+        const queryDetalle = `INSERT INTO detalle_pago (nroBoleta, nro, monto, tipo, puesto_id) VALUES (?, ?, ?, ?,?)`;
+
+        const promesas = detalles.map((unDetalle, index) => {
+            return Conexion.ejecutarQuery<any>(queryDetalle, [
+                this.nroBoleta,index+1, unDetalle.monto, unDetalle.tipo, unDetalle.puesto_id ])
+        });
+
+        await Promise.all(promesas)
+            .then((resultados) => {
+                console.log('DetallePago: nuevos registros insertados');
+                seRegistro = true;
+            })
+            .catch((error) => console.log("DetallePago-Error:", error));
+        return seRegistro;
     }
 }

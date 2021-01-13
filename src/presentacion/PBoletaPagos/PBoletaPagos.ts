@@ -41,7 +41,7 @@ export default class PBoletaPagos {
 
     public crearRutas(): void {
         this.router.route('/').get((req: Request, res: Response) => this.listar(req, res));
-        this.router.route('get_puestos').post((req: Request, res: Response) => this.listarPuestos(req,res));
+        this.router.route('/get_puestos').post((req: Request, res: Response) => this.listarPuestos(req,res));
         // this.router.route('/registrar').post(async (req: Request, res: Response) => this.registrar(req,res));            
         // this.router.route('/editar').post(async (req: Request, res: Response) => this.editar(req,res));
         // this.router.route('/modificar').put(async (req: Request, res: Response) => this.modificar(req,res));

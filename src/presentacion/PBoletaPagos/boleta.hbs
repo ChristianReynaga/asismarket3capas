@@ -30,7 +30,7 @@
                 </div>
 
 
-                <button type="button" name="addPago" id="addPago" class="btn btn-outline btn-lg btn-block">
+                <button type="button" name="addPago" id="addPago" class="btn btn-outline btn-lg btn-block" >
                     añadir pago
                 </button>
             </div>
@@ -39,7 +39,7 @@
 
     <br>
 
-    <h4>Pagos</h4>
+    <h4>detalle</h4>
     <table class="table">
         <thead>
             <tr>
@@ -49,34 +49,8 @@
                 <th>tipo</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <label for="">#1</label>
-                    </div>
-                </td>
-                <td scope="row">
-                    <div class="form-group">
-                        <label for="">puesto sector</label>
-                    </div>
-                </td>
-                <td scope="row">
-                    <div class="form-group">
-                        <input type="number" name="mont1" id="m1">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <select class="form-control" name="tipo1" id="t1">
-                            <option>luz</option>
-                            <option>agua</option>
-                            <option>multa</option>
-                        </select>
-
-                    </div>
-                </td>
-            </tr>
+        <tbody id="detallePago">
+            
         </tbody>
     </table>
     <br>
@@ -108,6 +82,62 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+         $(document).ready(function () {
+            // Bloqueamos el SELECT de los cursos
+            $("#slt-puestos").prop('disabled', true);
+
+            // Hacemos la lógica que cuando nuestro SELECT cambia de valor haga algo
+            $("#slt-comerciantes").change(function () {
+                // Guardamos el select de puestos
+                var puestos = $("#slt-puestos");
+
+                // Guardamos el select de comerciantes
+                var comerciantes = $(this);
+                const select = document.getElementById('slt-comerciantes');
+                const selectedOption = select.options[select.selectedIndex];
+                var valSelected = selectedOption.value;
+
+                if (valSelected != "null") {
+
+                    comerciantes.prop('disabled', true);
+
+                    axios.post('pagos/get_puestos', {
+                        responseType: 'json',
+                        comerciante_id: valSelected
+                    })
+                        .then(function (res) {
+                            if (res.status == 200) {
+                                comerciantes.prop('disabled', false);
+                                puestos.find('option').remove();
+
+                                console.log(res);
+
+                                res.data.map((elem, index) => {
+
+                                    puestos.append('<option value="' + elem.cod + '">' + elem.cod + ' - ' + elem.sector + '</option>');
+                                });
+
+                                puestos.prop('disabled', false);
+
+                            }
+                        })
+                        .catch(function (err) {
+                            //mensaje.innerText = 'Error de conexión ' + err;
+                            alert('Ocurrio un error en el servidor ..');
+                            comerciantes.prop('disabled', false);
+                            console.log(err);
+                        })
+                        .then(function () {
+                            //loading.style.display = 'none';
+                        });
+
+                }
+                else {
+                    puestos.find('option').remove();
+                    puestos.prop('disabled', true);
+                }
+            })
+        });
         $(document).ready(function () {
             // Bloqueamos el SELECT de los cursos
             $("#slt-puestos").prop('disabled', true);
@@ -164,6 +194,42 @@
                 }
             })
         });
+    </script>
+
+    <script>
+        function addDetalle(){
+
+            var detalle = $('#detallePago');
+             detalle.append(`<tr>
+                <td>
+                    <div class="form-group">
+                        <label for="">#1</label>
+                    </div>
+                </td>
+                <td scope="row">
+                    <div class="form-group">
+                        <label for="">puesto sector</label>
+                    </div>
+                </td>
+                <td scope="row">
+                    <div class="form-group">
+                        <input type="number" name="mont1" id="m1">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control" name="tipo1" id="t1">
+                            <option>luz</option>
+                            <option>agua</option>
+                            <option>multa</option>
+                        </select>
+
+                    </div>
+                </td>
+            </tr>`);            
+        }
+
+        $("#addPago").click(addDetalle);
     </script>
 
 
