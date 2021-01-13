@@ -22,7 +22,7 @@ export default class DPuesto{
 
     public async listar():Promise<any[]>{
         var query:string = ` SELECT puesto.cod, puesto.estado, sector.nombre as sector, sector.cod as sector_id,
-                            comerciante.apPaterno, comerciante.nombre, comerciante.ci as comerciante_id
+                             comerciante.ci as comerciante_id
                             FROM puesto, sector, comerciante
                             WHERE puesto.sector_id = sector.cod and puesto.comerciante_id = comerciante.ci`;
 

@@ -27,24 +27,11 @@ export default class DListaAsistencia {
         );
         return listas;
     }
+   
 
-    public async registrar(fecha: Date, puestos: any[]): Promise<boolean> {
-        let seRegistro:boolean = false;        
-
-        let idLista:number = await this.registrarLista(fecha);
-            
-        if(idLista != -1){
-            await this.registrarDetalle(idLista, puestos);
-        }else{
-            return seRegistro;
-        }
-    
-        return seRegistro;                
-    }
-
-    private async registrarLista(fecha:Date): Promise<number>{
+    public async registrar(fecha:Date): Promise<number>{
         let idLista:number = -1; 
-        const queryHeader:string = ` INSERT INTO lista_asistencia (fecha) VALUES (?)`;
+        const queryHeader:string = ` INSERT INTO lista_asistencia (fecha) VALUES (?) `;
         await Conexion.ejecutarQuery<any>(queryHeader, [fecha]).then(
             (data) => {                                                
                 idLista = data["insertId"];
@@ -53,22 +40,4 @@ export default class DListaAsistencia {
         return idLista;
     }
 
-    private async registrarDetalle(idLista:number, puestos:any[]):Promise<boolean>{
-        let seRegistro:boolean = false; 
-        const queryDetalle: string = ` INSERT INTO detalle_asistencia
-                             ( lista_asistencia_id, id, puesto_id, comerciante_id, estado) VALUES (?,?, ?, ?, ?) `; 
-
-        const promesas = puestos.map((unPuesto, index) => {
-            return Conexion.ejecutarQuery<any>(queryDetalle, [
-                idLista, index+1, unPuesto.cod, unPuesto.comerciante_id, unPuesto.estado ])
-        });
-
-        await Promise.all(promesas)
-            .then((resultados) => {
-                console.log('DPUESTO: nuevo registro insertado');
-                seRegistro = true;
-            })
-            .catch((error) => console.log("Error", error));
-        return seRegistro;
-    }
 }
