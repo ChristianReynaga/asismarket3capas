@@ -1,0 +1,70 @@
+<body>
+    <h1>Sector</h1>
+
+
+    <div class="container col-md-4 mx-auto">
+        <div class="card text-center">
+            <div class="card-header">
+                <h3>Registrar sector</h3>
+            </div>
+            <div class="card-body">
+                <form action="/sectores/registrar" method="POST">
+                    <div class="form-group">
+                        <label for="cod">codigo</label>
+                        <input type="number" class="form-control" id="cod" name="cod" aria-describedby="codHelp"
+                            placeholder="Ingresar el codigo" required autofocus>
+                        <small id="codHelp" class="form-text text-muted">Codigo unico</small>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="selectComerciante">nombre</label>
+                        <input type="text"  class="form-control" name="nombre" id="nombre">
+                    </div>
+                    <br>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Registrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">cod</th>
+                <th scope="col">nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each sectores}}
+            <tr scope="row">
+                <td>{{this.cod }}</td>
+                <td>{{this.nombre}}</td>                                
+                <td>
+                     <form method="POST" action="/sectores/eliminar?_method=DELETE"
+                        style="display: inline-block;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="cod" value="{{this.cod}}">
+                        <button type="submit" class="btn btn-outline-danger">eliminar</button>
+                    </form>
+
+                    <form method="POST" action="/sectores/editar?_method=POST" style="display: inline-block;">
+                        <input type="hidden" name="_method" value="POST">
+                        <input type="hidden" name="cod" value="{{this.cod}}">
+                        <input type="hidden" name="nombre" value="{{this.nombre}}">                        
+                        <button type="submit" class="btn btn-outline-info">modificar</button>
+                    </form>
+
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+
+</body>

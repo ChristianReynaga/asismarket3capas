@@ -1,0 +1,170 @@
+<body>
+
+    <div class="container col-sm-12 mx-auto">
+        <h3>Boleta de Pagos</h3>
+        <hr>
+        <div class="row">
+            <div class="container col-md-4 col-lg-3">
+                <div class="form-group">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" name="fecha" id="fecha">
+                </div>
+
+                <div class="form-group">
+                    <label for="slt-comerciantes">Elige un comerciante</label>
+                    <select class="form-control" id="slt-comerciantes" name="comerciante_id" required>
+                        <!-- Opciones de la lista -->
+                        <option value="null" selected>Seleccione un comerciante</option>
+                        {{#each comerciantes}}
+                        <option value="{{this.ci}}">{{this.apPaterno}} {{this.nombre}}</option>
+                        {{/each}}
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="container col-md-4 col-lg-3">
+                <div class="form-group">
+                    <label>Propiedades</label>
+                    <select id="slt-puestos" class="form-control" name="puestos_id" required></select>
+                </div>
+
+
+                <button type="button" name="addPago" id="addPago" class="btn btn-outline btn-lg btn-block">
+                    añadir pago
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <h4>Pagos</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>puesto</th>
+                <th>monto</th>
+                <th>tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="">#1</label>
+                    </div>
+                </td>
+                <td scope="row">
+                    <div class="form-group">
+                        <label for="">puesto sector</label>
+                    </div>
+                </td>
+                <td scope="row">
+                    <div class="form-group">
+                        <input type="number" name="mont1" id="m1">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control" name="tipo1" id="t1">
+                            <option>luz</option>
+                            <option>agua</option>
+                            <option>multa</option>
+                        </select>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Boletas anteriores</h3>
+    <table class="table table-striped table-responsive">
+        <thead class="thead-default">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">monto total (Bs)</th>
+                <th scope="col">fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each boletas}}
+            <tr>
+                <td scope="row">{{this.nro}}</td>
+                <td> {{this.monto_total}} </td>
+                <td> {{this.fecha}} </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+
+
+
+    {{>jquery-ajax}}
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Bloqueamos el SELECT de los cursos
+            $("#slt-puestos").prop('disabled', true);
+
+            // Hacemos la lógica que cuando nuestro SELECT cambia de valor haga algo
+            $("#slt-comerciantes").change(function () {
+                // Guardamos el select de puestos
+                var puestos = $("#slt-puestos");
+
+                // Guardamos el select de comerciantes
+                var comerciantes = $(this);
+                const select = document.getElementById('slt-comerciantes');
+                const selectedOption = select.options[select.selectedIndex];
+                var valSelected = selectedOption.value;
+
+                if (valSelected != "null") {
+
+                    comerciantes.prop('disabled', true);
+
+                    axios.post('pagos/get_puestos', {
+                        responseType: 'json',
+                        comerciante_id: valSelected
+                    })
+                        .then(function (res) {
+                            if (res.status == 200) {
+                                comerciantes.prop('disabled', false);
+                                puestos.find('option').remove();
+
+                                console.log(res);
+
+                                res.data.map((elem, index) => {
+
+                                    puestos.append('<option value="' + elem.cod + '">' + elem.cod + ' - ' + elem.sector + '</option>');
+                                });
+
+                                puestos.prop('disabled', false);
+
+                            }
+                        })
+                        .catch(function (err) {
+                            //mensaje.innerText = 'Error de conexión ' + err;
+                            alert('Ocurrio un error en el servidor ..');
+                            comerciantes.prop('disabled', false);
+                            console.log(err);
+                        })
+                        .then(function () {
+                            //loading.style.display = 'none';
+                        });
+
+                }
+                else {
+                    puestos.find('option').remove();
+                    puestos.prop('disabled', true);
+                }
+            })
+        });
+    </script>
+
+
+</body>

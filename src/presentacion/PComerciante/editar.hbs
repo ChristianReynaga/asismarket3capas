@@ -1,0 +1,50 @@
+
+
+<div class="container col-md-4 mx-auto">
+    <div class="card text-center">
+      <div class="card-header">
+        <h3>Editar - comerciante</h3>
+      </div>
+      <div class="card-body">
+        <form action="/comerciantes/modificar?_method=PUT" method="POST">
+          <input type="hidden" name="_method" value="PUT">
+
+          <div class="form-group">
+            <label for="ci">CI</label>
+            <input type="number" class="form-control" id="ci" name="ci" aria-describedby="ciHelp"
+              placeholder="Ingresar el CI" required value={{ci}} contenteditable="false">
+            <small id="ciHelp" class="form-text text-muted">id unico</small>
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresar el nombre" required
+              autocapitalize="words" value="{{nombre}}">
+          </div>
+          <div class="form-group">
+            <label for="apPaterno">Apellido Paterno</label>
+            <input type="text" class="form-control" id="apPaterno" name="apPaterno"
+              placeholder="Ingrese el apellido paterno" required autocapitalize="words" value="{{apPaterno}}">
+          </div>
+
+          <div class="form-group">
+            <label for="apmaterno">Apellido Materno</label>
+            <input type="text" class="form-control" id="apmaterno" name="apMaterno"
+              placeholder="Ingrese el apellido paterno" autocapitalize="words" value="{{apMaterno}}">
+            <small id="apmaterno" class="form-text text-muted">Opcional.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Telefono</label>
+            <input type="phone" name="telefono" class="form-control" id="telefono" placeholder="Ingrese el telefono" value="{{telefono}}">
+            <small id="telefono" class="form-text text-muted">Opcional.</small>
+          </div>
+
+          <br>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            guardar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>

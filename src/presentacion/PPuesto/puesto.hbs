@@ -1,0 +1,98 @@
+<body>
+    <h1>Puesto</h1>
+
+
+    <div class="container col-md-4 mx-auto">
+        <div class="card text-center">
+            <div class="card-header">
+                <h3>Registrar puesto</h3>
+            </div>
+            <div class="card-body">
+                <form action="/puestos/registrar" method="POST">
+                    <div class="form-group">
+                        <label for="cod">codigo</label>
+                        <input type="text" class="form-control" id="cod" name="cod" aria-describedby="codHelp"
+                            placeholder="Ingresar el codigo" required autofocus>
+                        <small id="codHelp" class="form-text text-muted">Codigo unico</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectEstado">Estado actual</label>
+                        <select class="form-control" id="selectEstado" name="estado">                            
+                            <option label="activo" value="A"></option>
+                            <option label="inactivo" value="I"></option>                                                     
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectSector">Sector</label>
+                        <select class="form-control" id="selectSector" name="sector_id">
+                            {{#each sectores}}
+                            <option label="{{this.nombre}}" value="{{this.cod}}"></option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectComerciante">Propietario</label>
+                        <select class="form-control" id="selectComerciante" name="comerciante_id">
+                            {{#each comerciantes}}
+                            <option label="{{this.apPaterno}} {{this.nombre}}" value="{{this.ci }}"></option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <br>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Registrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th scope="col">cod</th>
+                <th scope="col">estado</th>
+                <th scope="col">sector</th>
+                <th scope="col">propietario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each puestos}}
+            <tr scope="row">
+                <td>{{this.cod }}</td>
+                <td>{{this.estado}}</td>                
+                <td>{{this.sector}}</td>
+                <td> {{this.apPaterno}} {{this.nombre}} </td>
+                
+                <td>
+                     <form method="POST" action="/puestos/eliminar?_method=DELETE"
+                        style="display: inline-block;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="cod" value="{{this.cod}}">
+                        <button type="submit" class="btn btn-outline-danger">eliminar</button>
+                    </form>
+
+                    <form method="POST" action="/puestos/editar?_method=POST" style="display: inline-block;">
+                        <input type="hidden" name="_method" value="POST">
+                        <input type="hidden" name="cod" value="{{this.cod}}">
+                        <input type="hidden" name="estado" value="{{this.estado}}">   
+                        <input type="hidden" name="sector_id" value="{{this.sector_id}}">
+                        <input type="hidden" name="sector_nombre" value="{{this.sector}}">                        
+                        <input type="hidden" name="comerciante_id" value="{{this.comerciante_id}}">
+                        <input type="hidden" name="comerciante_nombre" value="{{this.apPaterno}} {{this.nombre}}">                        
+                        <button type="submit" class="btn btn-outline-info">modificar</button>
+                    </form>
+
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+
+</body>

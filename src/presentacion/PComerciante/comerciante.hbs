@@ -1,0 +1,101 @@
+<body>
+  <h1>Comerciantes</h1>
+
+
+  <div class="container col-md-4 mx-auto">
+    <div class="card text-center">
+      <div class="card-header">
+        <h3>Registrar comerciante</h3>
+      </div>
+      <div class="card-body">
+        <form action="/comerciantes/registrar" method="POST">
+          <div class="form-group">
+            <label for="ci">CI</label>
+            <input type="number" class="form-control" id="ci" name="ci" aria-describedby="emailHelp"
+              placeholder="Ingresar el CI" required autofocus>
+            {{!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+              else.</small> --}}
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresar el nombre" required
+              autocapitalize="words">
+          </div>
+          <div class="form-group">
+            <label for="apPaterno">Apellido Paterno</label>
+            <input type="text" class="form-control" id="apPaterno" name="apPaterno"
+              placeholder="Ingrese el apellido paterno" required autocapitalize="words">
+          </div>
+
+          <div class="form-group">
+            <label for="apMaterno">Apellido Materno</label>
+            <input type="text" class="form-control" id="apMaterno" name="apMaterno"
+              placeholder="Ingrese el apellido materno" autocapitalize="words">
+            <small id="apMaterno" class="form-text text-muted">Opcional.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Telefono</label>
+            <input type="number" class="form-control" name="telefono" id="telefono" placeholder="Ingrese el telefono">
+            <small id="telefono" class="form-text text-muted">Opcional.</small>
+          </div>
+
+
+          {{!-- <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+          </div> --}}
+          <br>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            Registrar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <table class="table table-sm table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ci</th>
+        <th scope="col">apellido</th>
+        <th scope="col">nombre</th>
+        <th scope="col">telefono</th>        
+        <th scope="col">opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each comerciantes}}
+      <tr>
+        <td scope="row">{{this.ci }}</td>
+        <td>{{this.apPaterno}} {{this.apMaterno}}</td>
+        <td>{{this.nombre}}</td>      
+        <td>{{this.telefono}}</td>
+        <td>
+          <form method="POST" action="/comerciantes/eliminar?_method=DELETE" style="display: inline-block;">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="ci" value="{{this.ci}}">
+            <button type="submit" class="btn btn-outline-danger">eliminar</button>
+          </form>
+
+          <form method="POST" action="/comerciantes/editar?_method=POST" style="display: inline-block;">
+            <input type="hidden" name="_method" value="POST">
+            <input type="hidden" name="ci" value="{{this.ci}}">
+            <input type="hidden" name="nombre" value="{{this.nombre}}">
+            <input type="hidden" name="apPaterno" value="{{this.apPaterno}}">
+            <input type="hidden" name="apMaterno" value="{{this.apMaterno}}">
+            <input type="hidden" name="telefono" value="{{this.telefono}}">
+            <button type="submit" class="btn btn-outline-info">modificar</button>
+          </form>
+
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+
+</body>
