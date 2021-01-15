@@ -14,12 +14,13 @@ export class NBoletaPagos {
         return this.dBoletaPagos.listar();
     }
 
-    public async registrar( fecha:Date, detalles:any[]):Promise<boolean>{
+    public async registrar( fecha:Date, comerciante_id:number, detalles:any[]):Promise<boolean>{
         
         let seRegistro:boolean = false;
         
         this.dBoletaPagos.setMontoTotal(this.sumarMontoTotal(detalles));
         this.dBoletaPagos.setFecha(fecha);
+        this.dBoletaPagos.setComercianteID(comerciante_id);
 
         await this.dBoletaPagos.registrar().then( async ( nroBoleta ) => {            
             if (nroBoleta != -1){

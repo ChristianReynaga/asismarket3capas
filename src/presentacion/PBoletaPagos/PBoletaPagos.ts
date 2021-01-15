@@ -31,6 +31,41 @@ export default class PBoletaPagos {
         });
     }
 
+    public async registrar(req:Request, res:Response){
+        // console.log(req.body);
+        const {fecha, comerciante_id} = req.body;                        
+        let detalle = this.cargarDetalle(req);        
+        // console.log(detalle);
+        this.nBoletaPagos.registrar(fecha, Number(comerciante_id), detalle);
+        res.redirect('/pagos');
+    }
+
+    private cargarDetalle(req:Request):any[]{
+        var ps:any[] = [];
+        var ms:any[] = [];
+        var ts:any[] = [];
+        
+        for ( let p in req.body )  {
+            if(p.startsWith('p')) ps.push(p)
+            else if (p.startsWith('m')) ms.push(p)
+            else if (p.startsWith('t')) ts.push(p)
+        };
+
+        ps.sort();
+        ms.sort();
+        ts.sort();
+
+        let detalle:any[] = [];
+
+        ps.forEach((value, index) => {
+            // console.log(value);
+            detalle.push(  ( { "puesto_id": req.body[value] ,"monto" : req.body[ms[index]] , "tipo": req.body[ts[index] ] })              
+            );             
+        });
+
+        return detalle;
+    }
+
     public async listarPuestos(req: Request, res: Response) {
         const { comerciante_id } = req.body;
         // console.log(req.body);
@@ -42,7 +77,7 @@ export default class PBoletaPagos {
     public crearRutas(): void {
         this.router.route('/').get((req: Request, res: Response) => this.listar(req, res));
         this.router.route('/get_puestos').post((req: Request, res: Response) => this.listarPuestos(req,res));
-        // this.router.route('/registrar').post(async (req: Request, res: Response) => this.registrar(req,res));            
+        this.router.route('/registrar').post(async (req: Request, res: Response) => this.registrar(req,res));            
         // this.router.route('/editar').post(async (req: Request, res: Response) => this.editar(req,res));
         // this.router.route('/modificar').put(async (req: Request, res: Response) => this.modificar(req,res));
         // this.router.route('/eliminar').delete(async (req: Request, res: Response) => this.eliminar(req,res));

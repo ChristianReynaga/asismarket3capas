@@ -1,60 +1,65 @@
 <body>
 
-    <div class="container col-sm-12 mx-auto">
-        <h3>Boleta de Pagos</h3>
-        <hr>
-        <div class="row">
-            <div class="container col-md-4 col-lg-3">
-                <div class="form-group">
-                    <label for="fecha">Fecha</label>
-                    <input type="date" name="fecha" id="fecha">
+    <form action="/pagos/registrar" method="post">
+
+        <div class="container col-sm-12 mx-auto">
+            <h3>Boleta de Pagos</h3>
+            <hr>
+            <div class="row">
+                <div class="container col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input class="form-control" type="date" name="fecha" id="fecha">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slt-comerciantes">Elige un comerciante</label>
+                        <select class="form-control" id="slt-comerciantes" name="comerciante_id" required>
+                            <!-- Opciones de la lista -->
+                            <option value="null" selected>Seleccione un comerciante</option>
+                            {{#each comerciantes}}
+                            <option value="{{this.ci}}">{{this.apPaterno}} {{this.nombre}}</option>
+                            {{/each}}
+
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="slt-comerciantes">Elige un comerciante</label>
-                    <select class="form-control" id="slt-comerciantes" name="comerciante_id" required>
-                        <!-- Opciones de la lista -->
-                        <option value="null" selected>Seleccione un comerciante</option>
-                        {{#each comerciantes}}
-                        <option value="{{this.ci}}">{{this.apPaterno}} {{this.nombre}}</option>
-                        {{/each}}
-
-                    </select>
+                <div class="container col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>Propiedades</label>
+                        <select id="slt-puestos" class="form-control" required></select>
+                    </div>
+                    <button type="button" name="addPago" id="addPago" class="btn btn-outline btn-md btn-block">
+                        añadir detalle
+                    </button>
                 </div>
-            </div>
-
-            <div class="container col-md-4 col-lg-3">
-                <div class="form-group">
-                    <label>Propiedades</label>
-                    <select id="slt-puestos" class="form-control" name="puestos_id" required></select>
-                </div>
-
-
-                <button type="button" name="addPago" id="addPago" class="btn btn-outline btn-lg btn-block" >
-                    añadir pago
-                </button>
             </div>
         </div>
-    </div>
 
+        <br>
+
+        <h4>detalle</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>puesto</th>
+                    <th>monto</th>
+                    <th>tipo</th>
+                </tr>
+            </thead>
+            <tbody id="detallePago">
+
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary btn-bg">
+            Registrar boleta pagos
+        </button>        
+
+    </form>
     <br>
-
-    <h4>detalle</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>puesto</th>
-                <th>monto</th>
-                <th>tipo</th>
-            </tr>
-        </thead>
-        <tbody id="detallePago">
-            
-        </tbody>
-    </table>
-    <br>
-
     <h3>Boletas anteriores</h3>
     <table class="table table-striped table-responsive">
         <thead class="thead-default">
@@ -62,6 +67,7 @@
                 <th scope="col">#</th>
                 <th scope="col">monto total (Bs)</th>
                 <th scope="col">fecha</th>
+                <th scope="col">opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +75,8 @@
             <tr>
                 <td scope="row">{{this.nro}}</td>
                 <td> {{this.monto_total}} </td>
-                <td> {{this.fecha}} </td>
+                <td>{{dateFormat this.fecha "D MMMM YYYY"}} </td>
+                <td>detalle</td>
             </tr>
             {{/each}}
         </tbody>
@@ -82,62 +89,6 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-         $(document).ready(function () {
-            // Bloqueamos el SELECT de los cursos
-            $("#slt-puestos").prop('disabled', true);
-
-            // Hacemos la lógica que cuando nuestro SELECT cambia de valor haga algo
-            $("#slt-comerciantes").change(function () {
-                // Guardamos el select de puestos
-                var puestos = $("#slt-puestos");
-
-                // Guardamos el select de comerciantes
-                var comerciantes = $(this);
-                const select = document.getElementById('slt-comerciantes');
-                const selectedOption = select.options[select.selectedIndex];
-                var valSelected = selectedOption.value;
-
-                if (valSelected != "null") {
-
-                    comerciantes.prop('disabled', true);
-
-                    axios.post('pagos/get_puestos', {
-                        responseType: 'json',
-                        comerciante_id: valSelected
-                    })
-                        .then(function (res) {
-                            if (res.status == 200) {
-                                comerciantes.prop('disabled', false);
-                                puestos.find('option').remove();
-
-                                console.log(res);
-
-                                res.data.map((elem, index) => {
-
-                                    puestos.append('<option value="' + elem.cod + '">' + elem.cod + ' - ' + elem.sector + '</option>');
-                                });
-
-                                puestos.prop('disabled', false);
-
-                            }
-                        })
-                        .catch(function (err) {
-                            //mensaje.innerText = 'Error de conexión ' + err;
-                            alert('Ocurrio un error en el servidor ..');
-                            comerciantes.prop('disabled', false);
-                            console.log(err);
-                        })
-                        .then(function () {
-                            //loading.style.display = 'none';
-                        });
-
-                }
-                else {
-                    puestos.find('option').remove();
-                    puestos.prop('disabled', true);
-                }
-            })
-        });
         $(document).ready(function () {
             // Bloqueamos el SELECT de los cursos
             $("#slt-puestos").prop('disabled', true);
@@ -197,40 +148,44 @@
     </script>
 
     <script>
-        function addDetalle(){
+        var count = 0;
 
+        function addDetalle() {
+            count = count + 1;
+            const select = document.getElementById('slt-puestos');
+            const selectedOption = select.options[select.selectedIndex];
+            var valSelected = selectedOption.value;
             var detalle = $('#detallePago');
-             detalle.append(`<tr>
+            detalle.append(`<tr>
                 <td>
                     <div class="form-group">
-                        <label for="">#1</label>
+                        <label for="">`+ count + `</label>
+                    </div>
+                </td>
+                <td scope="row">
+                    <div class="form-group">                        
+                        <input type="text" name="p`+ count + `" value="` + valSelected + `">
                     </div>
                 </td>
                 <td scope="row">
                     <div class="form-group">
-                        <label for="">puesto sector</label>
-                    </div>
-                </td>
-                <td scope="row">
-                    <div class="form-group">
-                        <input type="number" name="mont1" id="m1">
+                        <input type="number"  name="m`+ count + `" value=0>
                     </div>
                 </td>
                 <td>
                     <div class="form-group">
-                        <select class="form-control" name="tipo1" id="t1">
-                            <option>luz</option>
-                            <option>agua</option>
-                            <option>multa</option>
+                        <select class="form-control" name="t`+ count + `" >
+                            <option value="L">luz</option>
+                            <option value="A">agua</option>
+                            <option value="M">multa</option>
                         </select>
 
                     </div>
                 </td>
-            </tr>`);            
+            </tr>`);
         }
 
         $("#addPago").click(addDetalle);
     </script>
-
 
 </body>
