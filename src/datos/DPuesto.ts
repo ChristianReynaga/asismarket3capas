@@ -4,19 +4,28 @@ export default class DPuesto{
    
     private cod?:string;
     private estado?:string;
-    
+    private sector_id:number;
+    private comerciante_id:number;
 
     constructor( cod?:string, estado?:string){
         this.cod = cod || "";
         this.estado = estado || "A";        
     }
 
-    setCod(cod:string){
+    public setCod(cod:string){
         this.cod = cod;
     }
 
-    setEstado(estado:string){
+    public setEstado(estado:string){
         this.estado = estado;
+    }
+
+    public setSectorID(sector_id:number){
+        this.sector_id = sector_id;
+    }
+    
+    public setComercianteID(comerciante_id:number){
+        this.comerciante_id = comerciante_id;
     }
 
 
@@ -39,14 +48,14 @@ export default class DPuesto{
     }
 
     
-    public async registrar( sector_id:number, comerciante_id:number):Promise<boolean>{
+    public async registrar():Promise<boolean>{
 
         let seRegistro:boolean = false;
        
         const query = ` INSERT INTO puesto (cod, estado, sector_id, comerciante_id) VALUES (?, ?, ?,?)`;
         
         await Conexion.ejecutarQuery(query, 
-            [ this.cod, this.estado, sector_id, comerciante_id ])
+            [ this.cod, this.estado, this.sector_id, this.comerciante_id ])
             .then(                
                 (data) => {
                     console.log('DPUESTO: nuevo registro insertado');
@@ -59,13 +68,13 @@ export default class DPuesto{
         return seRegistro;
     }
 
-    public async modificar( sector_id:number, comerciante_id:number):Promise<boolean>{
+    public async modificar():Promise<boolean>{
         let modificado = false;
         
         const query = ` UPDATE puesto SET estado=?, sector_id=?, comerciante_id=? where cod = ?`;
 
         await Conexion.ejecutarQuery(query, 
-            [ this.estado, sector_id, comerciante_id, this.cod ])
+            [ this.estado, this.sector_id, this.comerciante_id, this.cod ])
             .then(
                 (data) => {
                     console.log('DPUESTO: registro modificado');
@@ -97,7 +106,7 @@ export default class DPuesto{
         return seElimino;
     }
 
-    public async getPuestos(comerciante_id:number):Promise<any[]>{
+    public async getPuestos():Promise<any[]>{
 
         const query = ` SELECT puesto.cod, sector.nombre as sector 
                         FROM puesto, sector 
@@ -105,7 +114,7 @@ export default class DPuesto{
 
         var puestos:any[] = [];
 
-        await Conexion.ejecutarQuery<any>(query, [comerciante_id])
+        await Conexion.ejecutarQuery<any>(query, [this.comerciante_id])
             .then(
                 (data) => {
                     puestos = data;

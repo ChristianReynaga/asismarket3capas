@@ -4,12 +4,12 @@ import { NComerciante } from "../../negocio/NComerciante";
 import { NPuesto } from "../../negocio/NPuesto";
 
 export default class PBoletaPagos {
-    private listaBoletas: any[];
-    private listaComerciantes: any[];
-    private listaPuestos: any[];
     private nBoletaPagos: NBoletaPagos;
     private nComerciante: NComerciante;
     private nPuestos: NPuesto;
+    
+    private listaComerciantes: any[];
+    private listaPuestos: any[];
     public router: Router = Router();
 
     constructor() {
@@ -22,11 +22,11 @@ export default class PBoletaPagos {
     }
 
     public async listar(req: Request, res: Response) {
-        this.listaBoletas = await this.nBoletaPagos.listar();
+        let listaBoletas:any[] = await this.nBoletaPagos.listar();
         this.listaComerciantes = await this.nComerciante.listar();
 
         res.render('PBoletaPagos/boleta', {
-            boletas: this.listaBoletas,
+            boletas: listaBoletas,
             comerciantes: this.listaComerciantes
         });
     }
@@ -67,10 +67,8 @@ export default class PBoletaPagos {
     }
 
     public async listarPuestos(req: Request, res: Response) {
-        const { comerciante_id } = req.body;
-        // console.log(req.body);
-        this.listaPuestos = await this.nPuestos.getPuestos(Number(comerciante_id));
-        // console.log(this.listPuestos);
+        const { comerciante_id } = req.body;        
+        this.listaPuestos = await this.nPuestos.getPuestos(Number(comerciante_id));        
         res.send(this.listaPuestos);
     }
 

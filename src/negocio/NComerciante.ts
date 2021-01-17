@@ -8,7 +8,7 @@ export class NComerciante {
         this.dComerciante = new DComerciante();
     }
 
-    public listar(){
+    public listar():Promise<any[]>{
         return this.dComerciante.listar();        
     }
     
@@ -36,8 +36,8 @@ export class NComerciante {
         return await this.dComerciante.eliminar();
     }
 
-    public async obtener(ci:number){
-        this.dComerciante.setCI(ci);
-        return this.dComerciante.obtener();
-    }
+    // public async obtener(ci:number){
+    //     this.dComerciante.setCI(ci);
+    //     return this.dComerciante.obtener();
+    // }
 }

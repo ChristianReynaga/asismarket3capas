@@ -3,11 +3,11 @@ import { DDetallePago } from "../datos/DDetallePago";
 
 export class NBoletaPagos {
     private dBoletaPagos : DBoletaPagos;
-    private dDetallePago:DDetallePago;
+    private arrayDetallePago:Array<DDetallePago>;
 
     constructor(){
         this.dBoletaPagos = new DBoletaPagos();
-        this.dDetallePago = new DDetallePago();
+        this.arrayDetallePago = new Array<DDetallePago>();
     }
 
     public listar():Promise<any[]>{
@@ -22,29 +22,38 @@ export class NBoletaPagos {
         this.dBoletaPagos.setFecha(fecha);
         this.dBoletaPagos.setComercianteID(comerciante_id);
 
-        await this.dBoletaPagos.registrar().then( async ( nroBoleta ) => {            
-            if (nroBoleta != -1){
-                this.dDetallePago.setNroBoleta(nroBoleta);
-                await this.dDetallePago.registrar(detalles).then(
-                    (res:boolean) => {
-                        if(res){
-                            console.log("NBoletaPago: se registro los detalles");
-                            seRegistro = true;
-                        }
-                    }
-                );
-            }
-        }).catch( (err) => console.log(err, "NBoletaPago: Error al insertar los datos"));
-        
+        this.cargarArrayDetalle(detalles);
+
+        if (this.arrayDetallePago.length == 0) return seRegistro;
+
+        let nroBoleta:number = await this.dBoletaPagos.registrar();
+        if(nroBoleta != -1){
+            seRegistro = true;
+            this.arrayDetallePago.forEach( async (unDetalle) => {
+                unDetalle.setNroBoleta(nroBoleta);
+                await unDetalle.registrar();
+            });
+        }
         return seRegistro;
     }
 
-    private sumarMontoTotal(detalles:any[]){
+    private sumarMontoTotal(detalles:any[]):number{
         let total:number = 0;
         detalles.forEach( (elem) => {
             total += elem.monto;
         });
         return total;
+    }
+
+    private cargarArrayDetalle(detalles:any[]){
+        detalles.forEach( (value, index)=>{
+            let unDetalle = new DDetallePago();
+            unDetalle.setNro(index+1);
+            unDetalle.setMonto(value.monto);
+            unDetalle.setTipo(value.tipo);
+            unDetalle.setPuestoID(value.puesto_id);
+            this.arrayDetallePago.push(unDetalle);
+        });
     }
 
     

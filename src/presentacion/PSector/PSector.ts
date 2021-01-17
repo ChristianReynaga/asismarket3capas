@@ -50,7 +50,7 @@ export default class PSector {
             res.redirect('/sectores');
     }
 
-    public crearRutas(): void {
+    private crearRutas(): void {
         this.router.route('/').get((req: Request, res: Response) => this.listar(req, res));
         this.router.route('/registrar').post(async (req: Request, res: Response) => this.registrar(req,res));            
         this.router.route('/editar').post(async (req: Request, res: Response) => this.editar(req,res));

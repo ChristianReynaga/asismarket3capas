@@ -46,46 +46,46 @@ export default class DeDetalleAsistencia {
         return detalles;
     }
 
-    // public async regitrar():Promise<boolean>{
-    //     let seRegistro:boolean = false;
+    public async registrar():Promise<boolean>{
+        let seRegistro:boolean = false;
 
-    //     const query = ` INSERT INTO detalle_asistencia (lista_asistencia_id, puesto_id, comerciante_id, estado) VALUES (?,?,?,?)  `;
+        const query = ` INSERT INTO detalle_asistencia (lista_asistencia_id, puesto_id, comerciante_id, estado) VALUES (?,?,?,?)  `;
 
-    //     await Conexion.ejecutarQuery(
-    //         query, [this.idLista, this.idPuesto, this.idComerciante, this.estado]
-    //     ).then(
-    //         (data) => {
-    //             seRegistro = true;
-    //             console.log("DDETALLEASISTENCIA: insertado");
-    //         }
-    //     ).catch(
-    //         (err) => console.log(err)
-    //     );
-    //     return seRegistro;
-    // }
-
-
-    public async registrar( detalles:any[]):Promise<boolean>{
-        let seRegistro:boolean = false; 
-        
-        if(this.idLista == -1) return seRegistro;
-
-        const queryDetalle: string = ` INSERT INTO detalle_asistencia
-                             ( lista_asistencia_id, puesto_id, comerciante_id, estado) VALUES (?,?, ?, ?) `; 
-
-        const promesas = detalles.map((unDetalle, index) => {
-            return Conexion.ejecutarQuery<any>(queryDetalle, [
-                this.idLista, unDetalle.puesto_id, unDetalle.comerciante_id, unDetalle.estado ])
-        });
-
-        await Promise.all(promesas)
-            .then((resultados) => {
-                console.log('DPUESTO: nuevos registros insertado');
+        await Conexion.ejecutarQuery(
+            query, [this.idLista, this.idPuesto, this.idComerciante, this.estado]
+        ).then(
+            (data) => {
                 seRegistro = true;
-            })
-            .catch((error) => console.log("DPUESTO-Error:", error));
+                console.log("DDETALLEASISTENCIA: insertado");
+            }
+        ).catch(
+            (err) => console.log(err)
+        );
         return seRegistro;
     }
+
+
+    // public async registrar( detalles:any[]):Promise<boolean>{
+    //     let seRegistro:boolean = false; 
+        
+    //     if(this.idLista == -1) return seRegistro;
+
+    //     const queryDetalle: string = ` INSERT INTO detalle_asistencia
+    //                          ( lista_asistencia_id, puesto_id, comerciante_id, estado) VALUES (?,?, ?, ?) `; 
+
+    //     const promesas = detalles.map((unDetalle, index) => {
+    //         return Conexion.ejecutarQuery<any>(queryDetalle, [
+    //             this.idLista, unDetalle.puesto_id, unDetalle.comerciante_id, unDetalle.estado ])
+    //     });
+
+    //     await Promise.all(promesas)
+    //         .then((resultados) => {
+    //             console.log('DPUESTO: nuevos registros insertado');
+    //             seRegistro = true;
+    //         })
+    //         .catch((error) => console.log("DPUESTO-Error:", error));
+    //     return seRegistro;
+    // }
 
 
 }

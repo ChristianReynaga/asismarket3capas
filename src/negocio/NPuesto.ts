@@ -15,7 +15,9 @@ export class NPuesto {
     public async registrar(cod:string, estado:string, sector_id?:number, comerciante_id?:number):Promise<boolean>{
         this.dPuesto.setCod(cod);
         this.dPuesto.setEstado(estado);
-        return await this.dPuesto.registrar(sector_id, comerciante_id);
+        this.dPuesto.setSectorID(sector_id);
+        this.dPuesto.setComercianteID(comerciante_id);
+        return await this.dPuesto.registrar();
 
     }
 
@@ -27,13 +29,15 @@ export class NPuesto {
     public async modificar(cod:string, estado:string, sector_id:number, comerciante_id:number):Promise<boolean>{
         this.dPuesto.setCod(cod);
         this.dPuesto.setEstado(estado);
-        
-        return await this.dPuesto.modificar(sector_id, comerciante_id);
+        this.dPuesto.setSectorID(sector_id);
+        this.dPuesto.setComercianteID(comerciante_id);    
+        return await this.dPuesto.modificar();
     }
 
 
     public  getPuestos(comerciante_id:number):Promise<any[]>{
-        return this.dPuesto.getPuestos(comerciante_id);
+        this.dPuesto.setComercianteID(comerciante_id);
+        return this.dPuesto.getPuestos();
     }
     
 }
