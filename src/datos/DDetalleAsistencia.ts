@@ -81,7 +81,7 @@ export default class DeDetalleAsistencia {
     }
     
     public async modifcar():Promise<boolean>{
-        let seRegistro:boolean = false;
+        let seModifico:boolean = false;
 
         const query = ` UPDATE detalle_asistencia SET estado=? WHERE lista_asistencia_id=? and puesto_id=? `;
 
@@ -89,13 +89,13 @@ export default class DeDetalleAsistencia {
             query, [ this.estado, this.idLista, this.idPuesto]
         ).then(
             (data) => {
-                seRegistro = true;
+                seModifico = true;
                 console.log("DDETALLEASISTENCIA: modificado");
             }
         ).catch(
             (err) => console.log(err)
         );
-        return seRegistro;
+        return seModifico;
     }
 
 

@@ -7,9 +7,9 @@ export default class PBoletaPagos {
     private nBoletaPagos: NBoletaPagos;
     private nComerciante: NComerciante;
     private nPuestos: NPuesto;
-    
-    private listaComerciantes: any[];
-    private listaPuestos: any[];
+
+    private listaComerciantes:any[];
+            
     public router: Router = Router();
 
     constructor() {
@@ -17,6 +17,7 @@ export default class PBoletaPagos {
         this.nComerciante = new NComerciante();
         this.nPuestos = new NPuesto();
         this.crearRutas();
+        this.listaComerciantes = [];
         // this.listar();
         // this.listarPuestos();
     }
@@ -37,6 +38,39 @@ export default class PBoletaPagos {
         let detalle = this.cargarDetalle(req);        
         // console.log(detalle);
         this.nBoletaPagos.registrar(fecha, Number(comerciante_id), detalle);
+        res.redirect('/pagos');
+    }
+
+    public async editar(req:Request, res:Response){
+        const {  nroBoleta } = req.body;         
+        let boleta:any = await this.nBoletaPagos.obtener(nroBoleta);        
+        let detalles:any[] = await this.nBoletaPagos.listarDetalle(nroBoleta);
+        let comerciante: any = await this.nComerciante.obtener(boleta.comerciante_id);
+    
+
+        res.render('PBoletaPagos/editar', {                                    
+            nroBoleta,
+            fecha:boleta.fecha, 
+            monto_total:boleta.monto_total,
+            comerciante_id: boleta.comerciante_id,
+            nombre: comerciante.nombre,
+            apPaterno: comerciante.apPaterno,
+            detalles : detalles,
+            comerciantes: this.listaComerciantes                
+        });   
+    }
+
+    public async modificar(req:Request, res:Response){
+        const {nroBoleta, fecha, comerciante_id} = req.body;        
+        let detalle = this.cargarDetalle(req);
+        this.nBoletaPagos.modificar( nroBoleta, fecha, Number(comerciante_id), detalle);
+        res.redirect('/pagos');
+    }
+
+    public async eliminar(req:Request, res:Response){
+        const {nroBoleta} = req.body;        
+        await this.nBoletaPagos.eliminar(Number(nroBoleta));
+
         res.redirect('/pagos');
     }
 
@@ -65,20 +99,21 @@ export default class PBoletaPagos {
 
         return detalle;
     }
+    
 
     public async listarPuestos(req: Request, res: Response) {
         const { comerciante_id } = req.body;        
-        this.listaPuestos = await this.nPuestos.getPuestos(Number(comerciante_id));        
-        res.send(this.listaPuestos);
+        let listaPuestos:any[] = await this.nPuestos.getPuestos(Number(comerciante_id));        
+        res.send(listaPuestos);
     }
 
     public crearRutas(): void {
         this.router.route('/').get((req: Request, res: Response) => this.listar(req, res));
         this.router.route('/get_puestos').post((req: Request, res: Response) => this.listarPuestos(req,res));
         this.router.route('/registrar').post(async (req: Request, res: Response) => this.registrar(req,res));            
-        // this.router.route('/editar').post(async (req: Request, res: Response) => this.editar(req,res));
-        // this.router.route('/modificar').put(async (req: Request, res: Response) => this.modificar(req,res));
-        // this.router.route('/eliminar').delete(async (req: Request, res: Response) => this.eliminar(req,res));
+        this.router.route('/editar').post(async (req: Request, res: Response) => this.editar(req,res));
+        this.router.route('/modificar').put(async (req: Request, res: Response) => this.modificar(req,res));
+        this.router.route('/eliminar').delete(async (req: Request, res: Response) => this.eliminar(req,res));
     }
 
 }

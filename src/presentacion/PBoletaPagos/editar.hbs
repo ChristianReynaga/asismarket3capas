@@ -1,6 +1,8 @@
 <body>
 
-    <form action="/pagos/registrar" method="post">
+    <form action="/pagos/modificar?_method=PUT" method="POST" style="display: block;">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="nroBoleta" value="{{nroBoleta}}">
 
         <div class="container col-sm-12 mx-auto">
             <h3>Boleta de Pagos</h3>
@@ -9,14 +11,14 @@
                 <div class="container col-md-4 col-lg-3">
                     <div class="form-group">
                         <label for="fecha">Fecha</label>
-                        <input class="form-control" type="date" name="fecha" id="fecha">
+                        <input class="form-control" type="date" name="fecha" id="fecha" value="{{dateFormat this.fecha "
+                            YYYY-MM-DD"}}">
                     </div>
 
                     <div class="form-group">
                         <label for="slt-comerciantes">Elige un comerciante</label>
                         <select class="form-control" id="slt-comerciantes" name="comerciante_id" required>
-                            <!-- Opciones de la lista -->
-                            <option value="null" selected>Seleccione un comerciante</option>
+                            <option value="{{comerciante_id}}" selected>{{apPaterno}} {{nombre}}</option>
                             {{#each comerciantes}}
                             <option value="{{this.ci}}">{{this.apPaterno}} {{this.nombre}}</option>
                             {{/each}}
@@ -50,46 +52,49 @@
                 </tr>
             </thead>
             <tbody id="detallePago">
-
+                {{#each detalles}}
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="">{{this.nro}}</label>
+                        </div>
+                    </td>
+                    <td scope="row">
+                        <div class="form-group">
+                            <input type="text" name="p{{this.nro}}" value="{{this.puesto_id}}">
+                        </div>
+                    </td>
+                    <td scope="row">
+                        <div class="form-group">
+                            <input type="number" name="m{{this.nro}}" value={{this.monto}}>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <select class="form-control" name="t{{this.nro}}">
+                                <option value="{{this.tipo}}">{{tipoPago this.tipo}}</option>
+                                <option value="L">luz</option>
+                                <option value="A">agua</option>
+                                <option value="M">multa</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
             </tbody>
         </table>
 
-        <button type="submit" class="btn btn-primary btn-bg">
-            Registrar boleta pagos
+        <button type="submit" class="btn btn-primary" style="margin-right: 2em;">
+            Modificar
         </button>
-
+        
     </form>
-    <br>
-    <h3>Boletas anteriores</h3>
-    <table class="table table-striped table-responsive">
-        <thead class="thead-default">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">monto total (Bs)</th>
-                <th scope="col">fecha</th>
-                <th scope="col">opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each boletas}}
-            <tr>
-                <td scope="row">{{this.nro}}</td>
-                <td> {{this.monto_total}} </td>
-                <td>{{dateFormat this.fecha "D MMMM YYYY"}} </td>
-                <td>detalle</td>
-                <td>
-                    <form method="POST" action="/pagos/editar?_method=POST" style="display: inline-block;">
-                        <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="nroBoleta" value="{{this.nro}}">
-                        <button type="submit" class="btn btn-secondary">detalle</button>
-                    </form>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-
-
+    <form method="POST" action="/pagos/eliminar?_method=DELETE"  style="display: inline-block;">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="nroBoleta" value="{{nroBoleta}}">
+            <button type="submit" class="btn btn-danger">eliminar</button>
+        </form>
+    <hr>
 
 
     {{>jquery-ajax}}
@@ -115,7 +120,7 @@
 
                     comerciantes.prop('disabled', true);
 
-                    axios.post('pagos/get_puestos', {
+                    axios.post('get_puestos', {
                         responseType: 'json',
                         comerciante_id: valSelected
                     })

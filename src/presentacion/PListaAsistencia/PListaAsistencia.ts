@@ -84,10 +84,10 @@ export default class PListaAsistencia {
     }
 
     public async eliminar(req:Request, res:Response){
-        const {idLista} = req.body;        
-        await this.nListaAsistencia.eliminar(Number(idLista));
+        const {nroBoleta} = req.body;        
+        await this.nListaAsistencia.eliminar(Number(nroBoleta));
 
-        res.redirect('/asistencia');
+        res.redirect('/pagos');
     }
 
     public async editar(req: Request, res: Response) {

@@ -27,8 +27,11 @@ app.engine('.hbs', exphbs({
     // layoutsDir:  path.join(app.get('views'), 'layout'),
     defaultLayout: 'main',   
     helpers:{
-        foo: function () { return 'FOO!'; },
-        bar: function () { return 'BAR!'; },
+        tipoPago: function tipoPago(tipo:string) { 
+            if (tipo == "M") return "multa"
+            else if (tipo == "L") return "luz"
+            else if (tipo == "A") return "agua"
+          },
         dateFormat: function dateFormat(date:Date, format:string, utc:boolean) {
             moment.locale('es');
             return (utc === true) ? moment(date).utc().format(format) : moment(date).format(format);
