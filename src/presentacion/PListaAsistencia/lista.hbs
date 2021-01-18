@@ -81,7 +81,14 @@
                     <td>{{dateFormat this.fecha "dddd D"}}</td>
                     <td>{{dateFormat this.fecha "MMMM"}}</td>
                     <td>{{dateFormat this.fecha "YYYY"}}</td>
-                    <td>Detalle</td>
+                    <td>
+                        <form method="POST" action="/asistencia/editar?_method=DELETE" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="hidden" name="idLista" value="{{this.id}}">
+                            <input type="hidden" name="fecha" value="{{this.fecha}}">
+                            <button type="submit" class="btn btn-secondary">detalle</button>
+                        </form>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>

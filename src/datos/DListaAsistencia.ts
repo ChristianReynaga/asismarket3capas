@@ -11,6 +11,14 @@ export default class DListaAsistencia {
         this.fecha = fecha || new Date();
     }
 
+    public setId(id:number){
+        this.id = id;
+    }
+
+    public setFecha(fecha:Date){
+        this.fecha = fecha;
+    }
+
 
 
     public async listar(): Promise<any[]> {
@@ -29,15 +37,27 @@ export default class DListaAsistencia {
     }
    
 
-    public async registrar(fecha:Date): Promise<number>{
+    public async registrar(): Promise<number>{
         let idLista:number = -1; 
         const queryHeader:string = ` INSERT INTO lista_asistencia (fecha) VALUES (?) `;
-        await Conexion.ejecutarQuery<any>(queryHeader, [fecha]).then(
+        await Conexion.ejecutarQuery<any>(queryHeader, [this.fecha]).then(
             (data) => {                                                
                 idLista = data["insertId"];
             }).catch((err) => console.log(err)
         );
         return idLista;
+    }
+
+    public async eliminar(): Promise<boolean>{      
+        let seElimino = false;  
+        const query:string = ` DELETE FROM lista_asistencia WHERE id=? `;
+        await Conexion.ejecutarQuery<any>(query, [this.id]).then(
+            (data) => {                                                
+                console.log("DListaAsistencia: registro eliminado");
+                seElimino = true;
+            }).catch((err) => console.log(err)
+        );
+        return seElimino;
     }
 
 }

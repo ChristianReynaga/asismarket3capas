@@ -64,6 +64,25 @@ export default class DeDetalleAsistencia {
         return seRegistro;
     }
 
+    public async eliminar():Promise<boolean>{
+        let seElimino:boolean = false;
+
+        const query = ` DELETE detalle_asistencia WHERE lista_asistencia_id=? and puesto_id=?  `;
+
+        await Conexion.ejecutarQuery(
+            query, [this.idLista, this.idPuesto]
+        ).then(
+            (data) => {
+                seElimino = true;
+                console.log("DDETALLEASISTENCIA: eliminado");
+            }
+        ).catch(
+            (err) => console.log(err)
+        );
+        return seElimino;
+    }
+
+
 
     // public async registrar( detalles:any[]):Promise<boolean>{
     //     let seRegistro:boolean = false; 
