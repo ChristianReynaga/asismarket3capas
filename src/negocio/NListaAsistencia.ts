@@ -18,15 +18,12 @@ export class NListaAsistencia {
     public async registrar(fecha:Date, detalles:any[]):Promise<boolean>{
         
         let seRegistro:boolean = false;
-        this.dListaAsistencia.setFecha(fecha);
-        
-        this.cargarArrayDetalle(detalles);
-
-        if (this.arrayDetalleAsistencia.length == 0) return seRegistro;
+        this.dListaAsistencia.setFecha(fecha);                        
 
         let idLista:number = await this.dListaAsistencia.registrar();
         if(idLista != -1){
             seRegistro = true;
+            this.cargarArrayDetalle(detalles);
             this.arrayDetalleAsistencia.forEach( async (unDetalle) => {
                 unDetalle.setIdLista(idLista);
                 await unDetalle.registrar();
@@ -35,18 +32,24 @@ export class NListaAsistencia {
         return seRegistro;
     }
 
-    public async eliminar(idLista:number):Promise<boolean>{
-        let seElimino:boolean = false;
+    public async eliminar(idLista:number):Promise<boolean>{        
         this.dListaAsistencia.setId(idLista);                        
+        return this.dListaAsistencia.eliminar();
+    }
 
-        seElimino = await this.dListaAsistencia.eliminar();
-        if(seElimino){            
-            this.arrayDetalleAsistencia.forEach( async (unDetalle) => {
+    public async modificar(idLista:number, fecha:Date, detalles:any[]):Promise<boolean>{
+        let seModifico = false;
+        this.dListaAsistencia.setId(idLista);
+        this.dListaAsistencia.setFecha(fecha);        
+        seModifico = await this.dListaAsistencia.modificar();
+        if(seModifico){
+            this.cargarArrayDetalle(detalles);
+            this.arrayDetalleAsistencia.forEach( async (unDetalle) =>{
                 unDetalle.setIdLista(idLista);
-                await unDetalle.eliminar();
+                await unDetalle.modifcar();
             });
-        }              
-        return seElimino;
+        }
+        return seModifico;
     }
 
     public async listarDetalle(idLista:number):Promise<any[]>{
@@ -57,7 +60,7 @@ export class NListaAsistencia {
     
 
     private cargarArrayDetalle(detalles:any[]){
-        // this.arrayDetalleAsistencia = new Array<DDetalleAsistencia>();
+        this.arrayDetalleAsistencia = new Array<DDetalleAsistencia>();
         detalles.forEach( (value)=>{
             let unDetalle = new DDetalleAsistencia();            
             unDetalle.setIdPuesto(value.puesto_id);

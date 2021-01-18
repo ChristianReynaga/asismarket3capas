@@ -36,8 +36,8 @@ export class NComerciante {
         return await this.dComerciante.eliminar();
     }
 
-    // public async obtener(ci:number){
-    //     this.dComerciante.setCI(ci);
-    //     return this.dComerciante.obtener();
-    // }
+    public async obtener(ci:number):Promise<any>{
+        this.dComerciante.setCI(ci);
+        return await this.dComerciante.obtener();
+    }
 }

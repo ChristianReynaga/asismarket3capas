@@ -22,9 +22,7 @@ export default class DeDetalleAsistencia {
     }
 
     public setEstado(es:string){
-        if ( es in ["A", "F"]){
             this.estado = es;
-        }
     }
 
     public setIdComerciante( idComerciante:number){
@@ -67,7 +65,7 @@ export default class DeDetalleAsistencia {
     public async eliminar():Promise<boolean>{
         let seElimino:boolean = false;
 
-        const query = ` DELETE detalle_asistencia WHERE lista_asistencia_id=? and puesto_id=?  `;
+        const query = ` DELETE FROM detalle_asistencia WHERE lista_asistencia_id=? and puesto_id=?  `;
 
         await Conexion.ejecutarQuery(
             query, [this.idLista, this.idPuesto]
@@ -81,6 +79,25 @@ export default class DeDetalleAsistencia {
         );
         return seElimino;
     }
+    
+    public async modifcar():Promise<boolean>{
+        let seRegistro:boolean = false;
+
+        const query = ` UPDATE detalle_asistencia SET estado=? WHERE lista_asistencia_id=? and puesto_id=? `;
+
+        await Conexion.ejecutarQuery(
+            query, [ this.estado, this.idLista, this.idPuesto]
+        ).then(
+            (data) => {
+                seRegistro = true;
+                console.log("DDETALLEASISTENCIA: modificado");
+            }
+        ).catch(
+            (err) => console.log(err)
+        );
+        return seRegistro;
+    }
+
 
 
 

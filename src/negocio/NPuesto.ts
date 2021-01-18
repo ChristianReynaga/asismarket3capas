@@ -39,5 +39,10 @@ export class NPuesto {
         this.dPuesto.setComercianteID(comerciante_id);
         return this.dPuesto.getPuestos();
     }
+
+    public async obtener(cod:string):Promise<any>{
+        this.dPuesto.setCod(cod);
+        return await this.dPuesto.obtener();
+    }
     
 }

@@ -127,6 +127,34 @@ export default class DPuesto{
 
     }
 
+    public async obtener():Promise<any>{
+
+        const query = ` SELECT puesto.cod, sector.nombre as sector 
+                        FROM puesto, sector 
+                        WHERE puesto.sector_id = sector.cod and puesto.cod = ? `;
+
+        var puesto:any = null;
+
+        await Conexion.ejecutarQuery<any[]>(query, [this.cod])
+            .then(
+                (data) => {
+                    if(data.length == 0){
+                        console.log('DCOMERCIANTE: no hay datos')
+                    }else{
+                        puesto = {
+                            "cod" : data[0].cod,
+                            "sector" : data[0].sector
+                        }                                               
+                    }
+                }
+            ).catch(
+                (err) => console.log(err)
+            );
+
+        return puesto;
+
+    }
+
     
 
 

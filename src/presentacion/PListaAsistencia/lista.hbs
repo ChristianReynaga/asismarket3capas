@@ -19,18 +19,8 @@
 
 
         <form action="/asistencia/registrar" method="post">
-            {{!-- <select class="list-group" name="lista_id" size="3" required> --}}
-                <!-- Opciones de la lista -->
-                {{!-- {{#each listas}} --}}
-                {{!-- <option class="list-group-item" value="{{this.id}}">{{this.fecha}}</option> --}}
-                {{!-- <option value="2" selected>Opción 2</option> <!-- Opción por defecto -->
-                <option value="3">Opción 3</option> --}}
-                {{!-- {{/each}} --}}
-                {{!--
-            </select> --}}
-
             <div class="form-group">
-                <label for="fecha">Seleccione la fecha de la lista</label>
+                <label for="fecha">Seleccione la fecha</label>
                 <input type="date" id="fecha" name="fecha" value="2020-01-01" min="2020-01-01" max="2020-12-31">
             </div>
 
@@ -48,11 +38,11 @@
                     {{#each detalles}}
                     <tr scope="row">
                         <td>{{this.apPaterno}} {{this.nombre}}</td>
-                        <td>{{this.cod }}</td>
+                        <td>{{this.puesto_id }}</td>
                         <td>{{this.sector}}</td>
                         <td>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="{{this.cod}}">
+                                <input class="form-check-input" type="checkbox" name="{{this.puesto_id}}">
                             </div>
                         </td>
                     </tr>
@@ -82,7 +72,7 @@
                     <td>{{dateFormat this.fecha "MMMM"}}</td>
                     <td>{{dateFormat this.fecha "YYYY"}}</td>
                     <td>
-                        <form method="POST" action="/asistencia/editar?_method=DELETE" style="display: inline-block;">
+                        <form method="POST" action="/asistencia/editar?_method=POST" style="display: inline-block;">
                             <input type="hidden" name="_method" value="POST">
                             <input type="hidden" name="idLista" value="{{this.id}}">
                             <input type="hidden" name="fecha" value="{{this.fecha}}">

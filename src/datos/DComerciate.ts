@@ -119,25 +119,29 @@ export default class DComerciante{
         return eliminado;
     }
 
-    // public async obtener(){
-    //     const query = `
-    //         SELECT comerciante.ci, comerciante.nombre, comerciante.apPaterno FROM comerciante WHERE ci=?`;
+    public async obtener():Promise<any>{
+        const query = `
+            SELECT comerciante.ci, comerciante.nombre, comerciante.apPaterno FROM comerciante WHERE ci=?`;
 
-    //     return await Conexion.ejecutarQuery(query, 
-    //         [this.ci])
-    //         .then(
-    //             (data) => {
-    //                 // if(data == 0){
-    //                 //     console.log('DCOMERCIANTE: no hay datos')
-    //                 // }else{
-    //                 //     this.ci = data[0].ci;
-    //                 //     this.nombre = data[0].nombre;
-    //                 //     this.apPaterno = data[0].apPaterno;
-    //                 // }
-    //             }
-    //         ).catch(
-    //             (err) => console.log(err)
-    //         );
-    // }
+        var comerciante:any = null;
+        await Conexion.ejecutarQuery<any[]>(query, 
+            [this.ci])
+            .then(
+                (data) => {
+                    if(data.length == 0){
+                        console.log('DCOMERCIANTE: no hay datos')
+                    }else{
+                        comerciante = {
+                            "ci" : data[0].ci,
+                            "nombre" : data[0].nombre,                        
+                         "apPaterno" : data[0].apPaterno
+                        }
+                    }
+                }
+            ).catch(
+                (err) => console.log(err)
+            );
+        return comerciante;
+    }
 
 }

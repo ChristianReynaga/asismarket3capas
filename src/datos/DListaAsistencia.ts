@@ -60,4 +60,16 @@ export default class DListaAsistencia {
         return seElimino;
     }
 
+    public async modificar(): Promise<boolean>{      
+        let seModifico = false;  
+        const query:string = ` UPDATE lista_asistencia SET fecha=? WHERE id=? `;
+        await Conexion.ejecutarQuery<any>(query, [this.fecha, this.id]).then(
+            (data) => {                                                
+                console.log("DListaAsistencia: registro modificado");
+                seModifico = true;
+            }).catch((err) => console.log(err)
+        );
+        return seModifico;
+    } 
+
 }
