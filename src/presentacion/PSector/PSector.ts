@@ -4,34 +4,27 @@ import NSector  from '../../negocio/NSector';
 export default class PSector {
     public router: Router = Router();
     private nSector: NSector;
-    private listaSectores: any[];
 
-    constructor() {
-        this.listaSectores = [];
+    constructor() {    
         this.nSector = new NSector();
         this.crearRutas();
-        // this.registrar();
-        // this.editar();
-        // this.modificar();
-        // this.eliminar();
     }
 
     public async listar(req: Request, res: Response) {
-        this.listaSectores = await this.nSector.listar();
+        let listaSectores:any[] = await this.nSector.listar();
         res.render("PSector/sector", {
-            sectores: this.listaSectores,
+            sectores: listaSectores,
         });
     }
 
     public async registrar(req: Request, res: Response) {
         const { cod, nombre } = req.body;
-        const resp = await this.nSector.registrar( cod, nombre);
+        await this.nSector.registrar( cod, nombre);
         res.redirect('/sectores');        
     }
 
     public editar(req: Request, res: Response) {
-        const { cod, nombre } = req.body;
-            // const resp = await this.nComerciante.modificar(ci, nombre, apPaterno);            
+        const { cod, nombre } = req.body;                       
             res.render('PSector/editar', {
                 cod: Number(cod),
                 nombre: nombre,                
@@ -40,14 +33,14 @@ export default class PSector {
 
     public async modificar(req: Request, res: Response) {
         const { cod, nombre } = req.body;            
-            const resp = await this.nSector.modificar(Number(cod), nombre);
-            res.redirect('/sectores');        
+        await this.nSector.modificar(Number(cod), nombre);
+        res.redirect('/sectores');        
     }
 
     public async eliminar(req: Request, res: Response) {
         const cod: number = Number(req.body.cod);
-            const resp = await this.nSector.eliminar(cod);
-            res.redirect('/sectores');
+        await this.nSector.eliminar(cod);
+        res.redirect('/sectores');
     }
 
     private crearRutas(): void {

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import exphbs from 'express-handlebars';
 import path from 'path';
 import methodOverride from 'method-override';

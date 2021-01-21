@@ -15,13 +15,9 @@ export default class PPuesto{
         this.nSector = new NSector();     
         this.nComerciante = new NComerciante();
         this.crearRutas();
-        // this.listar();
-        // this.registrar();
-        // this.eliminar();
     }
 
-    public async listar(req:Request, res:Response){                 
-        // const result = await this.nComerciante.listar();        
+    public async listar(req:Request, res:Response){                          
         let listaSectores = await this.nSector.listar();  
         let listaComerciantes = await this.nComerciante.listar();     
         let listaPuesto:any[] = await  this.nPuesto.listar();                
@@ -39,7 +35,8 @@ export default class PPuesto{
         listaPuesto.map( (p)=>{
             listaComerciantes.forEach( (c) =>{
                 if(p.comerciante_id  == c.ci){
-                    propiedades.push({"apPaterno": c.apPaterno, "nombre": c.nombre, "cod": p.cod, "sector": p.sector, "estado":p.estado, "sector_id":p.sector_id, "comerciante_id":p.comerciante_id});
+                    propiedades.push({"apPaterno": c.apPaterno, "nombre": c.nombre, "cod": p.cod, "sector": p.sector, 
+                    "estado":p.estado, "sector_id":p.sector_id, "comerciante_id":p.comerciante_id});
                 }
             });
         });

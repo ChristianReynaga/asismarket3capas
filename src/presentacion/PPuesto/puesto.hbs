@@ -18,9 +18,9 @@
 
                     <div class="form-group">
                         <label for="selectEstado">Estado actual</label>
-                        <select class="form-control" id="selectEstado" name="estado">                            
+                        <select class="form-control" id="selectEstado" name="estado">
                             <option label="activo" value="A"></option>
-                            <option label="inactivo" value="I"></option>                                                     
+                            <option label="inactivo" value="I"></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -52,47 +52,49 @@
 
     <hr>
 
-    <table class="table table-sm table-hover">
-        <thead>
-            <tr>
-                <th scope="col">cod</th>
-                <th scope="col">estado</th>
-                <th scope="col">sector</th>
-                <th scope="col">propietario</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each propiedades}}
-            <tr scope="row">
-                <td>{{this.cod }}</td>
-                <td>{{this.estado}}</td>                
-                <td>{{this.sector}}</td>
-                <td> {{this.apPaterno}} {{this.nombre}} </td>
-                
-                <td>
-                     <form method="POST" action="/puestos/eliminar?_method=DELETE"
-                        style="display: inline-block;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="cod" value="{{this.cod}}">
-                        <button type="submit" class="btn btn-outline-danger">eliminar</button>
-                    </form>
+    <div class="col-md-6 col-sm-12 mx-auto">
+        <h3>puestos</h3>
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">cod</th>
+                    <th scope="col">estado</th>
+                    <th scope="col">sector</th>
+                    <th scope="col">propietario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each propiedades}}
+                <tr scope="row">
+                    <td>{{this.cod }}</td>
+                    <td>{{this.estado}}</td>
+                    <td>{{this.sector}}</td>
+                    <td> {{this.apPaterno}} {{this.nombre}} </td>
 
-                    <form method="POST" action="/puestos/editar?_method=POST" style="display: inline-block;">
-                        <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="cod" value="{{this.cod}}">
-                        <input type="hidden" name="estado" value="{{this.estado}}">   
-                        <input type="hidden" name="sector_id" value="{{this.sector_id}}">
-                        <input type="hidden" name="sector_nombre" value="{{this.sector}}">                        
-                        <input type="hidden" name="comerciante_id" value="{{this.comerciante_id}}">
-                        <input type="hidden" name="comerciante_nombre" value="{{this.apPaterno}} {{this.nombre}}">                        
-                        <button type="submit" class="btn btn-outline-info">modificar</button>
-                    </form>
+                    <td>
+                        <form method="POST" action="/puestos/eliminar?_method=DELETE" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="cod" value="{{this.cod}}">
+                            <button type="submit" class="btn btn-outline-danger">eliminar</button>
+                        </form>
 
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+                        <form method="POST" action="/puestos/editar?_method=POST" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="hidden" name="cod" value="{{this.cod}}">
+                            <input type="hidden" name="estado" value="{{this.estado}}">
+                            <input type="hidden" name="sector_id" value="{{this.sector_id}}">
+                            <input type="hidden" name="sector_nombre" value="{{this.sector}}">
+                            <input type="hidden" name="comerciante_id" value="{{this.comerciante_id}}">
+                            <input type="hidden" name="comerciante_nombre" value="{{this.apPaterno}} {{this.nombre}}">
+                            <button type="submit" class="btn btn-outline-info">modificar</button>
+                        </form>
+
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 
 
 </body>

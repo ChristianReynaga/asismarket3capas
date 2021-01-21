@@ -1,4 +1,4 @@
-import { Router, Request, Response, request } from "express";
+import { Router, Request, Response } from "express";
 import { NBoletaPagos } from "../../negocio/NBoletaPagos";
 import { NComerciante } from "../../negocio/NComerciante";
 import { NPuesto } from "../../negocio/NPuesto";
@@ -32,11 +32,9 @@ export default class PBoletaPagos {
         });
     }
 
-    public async registrar(req:Request, res:Response){
-        // console.log(req.body);
+    public async registrar(req:Request, res:Response){        
         const {fecha, comerciante_id} = req.body;                        
-        let detalle = this.cargarDetalle(req);        
-        // console.log(detalle);
+        let detalle = this.cargarDetalle(req);                
         this.nBoletaPagos.registrar(fecha, Number(comerciante_id), detalle);
         res.redirect('/pagos');
     }

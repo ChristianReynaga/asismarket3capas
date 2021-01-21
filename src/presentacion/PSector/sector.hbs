@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <label for="selectComerciante">nombre</label>
-                        <input type="text"  class="form-control" name="nombre" id="nombre">
+                        <input type="text" class="form-control" name="nombre" id="nombre">
                     </div>
                     <br>
 
@@ -33,38 +33,40 @@
 
     <hr>
 
-    <table class="table table-sm table-hover">
-        <thead>
-            <tr>
-                <th scope="col">cod</th>
-                <th scope="col">nombre</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each sectores}}
-            <tr scope="row">
-                <td>{{this.cod }}</td>
-                <td>{{this.nombre}}</td>                                
-                <td>
-                     <form method="POST" action="/sectores/eliminar?_method=DELETE"
-                        style="display: inline-block;">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="cod" value="{{this.cod}}">
-                        <button type="submit" class="btn btn-outline-danger">eliminar</button>
-                    </form>
+    <div class="col-md-6 col-sm-12 mx-auto">
+        <h3>sectores</h3>
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">cod</th>
+                    <th scope="col">nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each sectores}}
+                <tr scope="row">
+                    <td>{{this.cod }}</td>
+                    <td>{{this.nombre}}</td>
+                    <td>
+                        <form method="POST" action="/sectores/eliminar?_method=DELETE" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="cod" value="{{this.cod}}">
+                            <button type="submit" class="btn btn-outline-danger">eliminar</button>
+                        </form>
 
-                    <form method="POST" action="/sectores/editar?_method=POST" style="display: inline-block;">
-                        <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="cod" value="{{this.cod}}">
-                        <input type="hidden" name="nombre" value="{{this.nombre}}">                        
-                        <button type="submit" class="btn btn-outline-info">modificar</button>
-                    </form>
+                        <form method="POST" action="/sectores/editar?_method=POST" style="display: inline-block;">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="hidden" name="cod" value="{{this.cod}}">
+                            <input type="hidden" name="nombre" value="{{this.nombre}}">
+                            <button type="submit" class="btn btn-outline-info">modificar</button>
+                        </form>
 
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 
 
 </body>

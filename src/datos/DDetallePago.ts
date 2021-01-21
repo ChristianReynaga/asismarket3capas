@@ -66,7 +66,7 @@ export class DDetallePago {
         return seRegistro;
     }
 
-    public async modifcar():Promise<boolean>{
+    public async modificar():Promise<boolean>{
         let seModifico:boolean = false;
 
         const query = ` UPDATE detalle_pago SET monto=?, tipo=?,puesto_id=? WHERE nroBoleta=? and nro=? `;

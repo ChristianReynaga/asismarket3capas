@@ -53,7 +53,7 @@ export class NBoletaPagos {
         if(seModifico){            
             this.arrayDetallePago.forEach( async (unDetalle) => {
                 unDetalle.setNroBoleta(nroBoleta);
-                await unDetalle.modifcar();
+                await unDetalle.modificar();
             });
         }
         return seModifico;

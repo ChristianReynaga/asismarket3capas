@@ -57,45 +57,48 @@
 
   <hr>
 
-  <table class="table table-sm table-hover">
-    <thead>
-      <tr>
-        <th scope="col">ci</th>
-        <th scope="col">apellido</th>
-        <th scope="col">nombre</th>
-        <th scope="col">telefono</th>        
-        <th scope="col">opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each comerciantes}}
-      <tr>
-        <td scope="row">{{this.ci }}</td>
-        <td>{{this.apPaterno}} {{this.apMaterno}}</td>
-        <td>{{this.nombre}}</td>      
-        <td>{{this.telefono}}</td>
-        <td>
-          <form method="POST" action="/comerciantes/eliminar?_method=DELETE" style="display: inline-block;">
-            <input type="hidden" name="_method" value="DELETE">
-            <input type="hidden" name="ci" value="{{this.ci}}">
-            <button type="submit" class="btn btn-outline-danger">eliminar</button>
-          </form>
+  <div class="col-md-6 col-sm-12 mx-auto">
+    <h3>comerciantes</h3>
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ci</th>
+          <th scope="col">apellido</th>
+          <th scope="col">nombre</th>
+          <th scope="col">telefono</th>
+          <th scope="col">opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each comerciantes}}
+        <tr>
+          <td scope="row">{{this.ci }}</td>
+          <td>{{this.apPaterno}} {{this.apMaterno}}</td>
+          <td>{{this.nombre}}</td>
+          <td>{{this.telefono}}</td>
+          <td>
+            <form method="POST" action="/comerciantes/eliminar?_method=DELETE" style="display: inline-block;">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="hidden" name="ci" value="{{this.ci}}">
+              <button type="submit" class="btn btn-outline-danger">eliminar</button>
+            </form>
 
-          <form method="POST" action="/comerciantes/editar?_method=POST" style="display: inline-block;">
-            <input type="hidden" name="_method" value="POST">
-            <input type="hidden" name="ci" value="{{this.ci}}">
-            <input type="hidden" name="nombre" value="{{this.nombre}}">
-            <input type="hidden" name="apPaterno" value="{{this.apPaterno}}">
-            <input type="hidden" name="apMaterno" value="{{this.apMaterno}}">
-            <input type="hidden" name="telefono" value="{{this.telefono}}">
-            <button type="submit" class="btn btn-outline-info">modificar</button>
-          </form>
+            <form method="POST" action="/comerciantes/editar?_method=POST" style="display: inline-block;">
+              <input type="hidden" name="_method" value="POST">
+              <input type="hidden" name="ci" value="{{this.ci}}">
+              <input type="hidden" name="nombre" value="{{this.nombre}}">
+              <input type="hidden" name="apPaterno" value="{{this.apPaterno}}">
+              <input type="hidden" name="apMaterno" value="{{this.apMaterno}}">
+              <input type="hidden" name="telefono" value="{{this.telefono}}">
+              <button type="submit" class="btn btn-outline-info">modificar</button>
+            </form>
 
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
 
 </body>
